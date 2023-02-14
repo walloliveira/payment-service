@@ -1,0 +1,9 @@
+quarkus:
+  http:
+    port: 9090
+  flyway:
+    migrate-at-start: true
+    create-schemas: true
+    default-schema: payment_service_sch
+encrypt:
+  algorithm: AES

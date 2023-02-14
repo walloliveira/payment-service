@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  postgres_db:
+    image: postgres:15.1-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=payment_service_adm
+      - POSTGRES_PASSWORD=WJvlcsKMGdTDl0lWAwclEX6LFtyfQwfg
+      - POSTGRES_DB=walloliveira
+      - TZ=Americas/Sao_Paulo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_db_vm:/var/lib/postgresql/data
+volumes:
+  postgres_db_vm:

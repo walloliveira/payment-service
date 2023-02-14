@@ -1,0 +1,15 @@
+quarkus:
+  hibernate-orm:
+    database:
+      generation:
+        ~: drop-and-create
+  datasource:
+    db-kind: h2
+    jdbc:
+      url: jdbc:h2:mem:walloliveira_payment_service;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;
+  flyway:
+    migrate-at-start: false
+    create-schemas: false
+    default-schema: public
+encrypt:
+  key: 12d3bcc88cabcf50aba877e04364ac62
