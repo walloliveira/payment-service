@@ -2,7 +2,7 @@ quarkus:
   hibernate-orm:
     database:
       generation:
-        ~: drop-and-create
+        ~: none
   datasource:
     db-kind: postgresql
     username: payment_service_adm
@@ -12,6 +12,4 @@ quarkus:
   flyway:
     repair-at-start: true
 encrypt:
-  key: 0f7de5a2e21f6d0b82fd739d37b927d4
-pagseguro:
-  token: EC7C6842FD9E4D98931A5E04B8B06005
+  key: 12d3bcc88cabcf50aba877e04364ac62
