@@ -11,5 +11,3 @@ quarkus:
     migrate-at-start: false
     create-schemas: false
     default-schema: public
-encrypt:
-  key: 12d3bcc88cabcf50aba877e04364ac62
