@@ -23,8 +23,4 @@ abstract class InputCode(v: String?) {
             throw IllegalArgumentException("Invalid value")
         }
     }
-
-    override fun toString(): String {
-        return "InputCode(value=$value)"
-    }
 }

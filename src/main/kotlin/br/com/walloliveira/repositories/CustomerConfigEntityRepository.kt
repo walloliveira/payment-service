@@ -1,6 +1,7 @@
 package br.com.walloliveira.repositories
 
 import br.com.walloliveira.domains.customer.config.CustomerConfig
+import br.com.walloliveira.domains.vos.Api
 import br.com.walloliveira.domains.vos.Code
 import br.com.walloliveira.entities.customer.config.CustomerConfigEntity
 import io.quarkus.hibernate.orm.panache.kotlin.PanacheRepository
@@ -20,5 +21,13 @@ class CustomerConfigEntityRepository : CustomerConfigRepository, PanacheReposito
 
     override fun findByCustomerCode(customerCode: Code): List<CustomerConfig> {
         return find("customerCode", customerCode.valueString).list().map { it.toDomain() }
+    }
+
+    override fun findByCustomerCodeAndApi(customerCode: Code, api: Api): CustomerConfig? {
+        return find(
+            "customerCode = ?1 and api = ?2",
+            customerCode.valueString,
+            api.description,
+        ).firstResult()?.toDomain()
     }
 }
