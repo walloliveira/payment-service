@@ -28,6 +28,7 @@ class CustomerConfigResourceTest {
             .statusCode(201)
         RestAssured.given()
             .header("Content-Type", MediaType.APPLICATION_JSON)
+            .`when`()
             .get("/v1/customer/{customerCode}/config", customerCode)
             .then()
             .statusCode(200)
