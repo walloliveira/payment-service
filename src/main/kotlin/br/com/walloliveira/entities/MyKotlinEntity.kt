@@ -1,4 +1,4 @@
-package br.com.walloliveira
+package br.com.walloliveira.entities
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

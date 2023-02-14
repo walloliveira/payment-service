@@ -12,6 +12,7 @@ repositories {
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
+val archunitJunit5Version: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -28,6 +29,7 @@ dependencies {
     implementation("io.quarkus:quarkus-config-yaml")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("com.tngtech.archunit:archunit-junit5:${archunitJunit5Version}")
 }
 
 group = "br.com.walloliveira"

@@ -1,4 +1,4 @@
-package br.com.walloliveira
+package br.com.walloliveira.resources
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path
