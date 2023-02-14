@@ -5,5 +5,16 @@ quarkus:
     migrate-at-start: true
     create-schemas: true
     default-schema: payment_service_sch
+  hibernate-orm:
+    database:
+      generation:
+        ~: none
+  datasource:
+    db-kind: postgresql
+    username: payment_service_adm
+    password: WJvlcsKMGdTDl0lWAwclEX6LFtyfQwfg
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/walloliveira?currentSchema=payment_service_sch
 encrypt:
   algorithm: AES
+  key: 12d3bcc88cabcf50aba877e04364ac62

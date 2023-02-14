@@ -13,23 +13,25 @@ val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 val archunitJunit5Version: String by project
+val kotestVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
     implementation("io.quarkus:quarkus-jdbc-h2")
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
-    implementation("io.quarkus:quarkus-resteasy-reactive-kotlin-serialization")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
-    implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("io.quarkus:quarkus-resteasy-jackson")
     implementation("io.quarkus:quarkus-flyway")
     implementation("io.quarkus:quarkus-config-yaml")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("com.tngtech.archunit:archunit-junit5:${archunitJunit5Version}")
+    testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
 }
 
 group = "br.com.walloliveira"
@@ -42,6 +44,7 @@ java {
 
 tasks.withType<Test> {
     systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+    useJUnitPlatform()
 }
 allOpen {
     annotation("javax.ws.rs.Path")

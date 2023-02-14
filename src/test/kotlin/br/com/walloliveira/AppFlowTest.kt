@@ -6,6 +6,7 @@ import com.tngtech.archunit.junit.ArchTest
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition
 import com.tngtech.archunit.library.Architectures
 import javax.persistence.Entity
+import javax.ws.rs.Path
 
 @AnalyzeClasses(packages = ["br.com.walloliveira"])
 class AppFlowTest {
@@ -65,7 +66,7 @@ class AppFlowTest {
         val rule = ArchRuleDefinition
             .classes()
             .that()
-            .resideInAPackage("..resources..")
+            .areAnnotatedWith(Path::class.java)
             .should()
             .haveSimpleNameEndingWith("Resource")
         rule.check(importedClasses)
