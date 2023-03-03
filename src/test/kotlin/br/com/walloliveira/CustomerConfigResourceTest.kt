@@ -1,6 +1,6 @@
 package br.com.walloliveira
 
-import br.com.walloliveira.resources.v1.customer.config.NewCustomerConfigData
+import br.com.walloliveira.application.v1.requests.NewCustomerConfigRequest
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured
 import org.hamcrest.Matchers.`is`
@@ -11,25 +11,31 @@ import javax.ws.rs.core.MediaType
 @QuarkusTest
 class CustomerConfigResourceTest {
 
+    companion object {
+        private const val V1_CUSTOMER_CONFIG_PATH = "/v1/customer-config"
+    }
+
     @Test
     fun newCustomerConfigShouldBeCreated() {
-        val payload = NewCustomerConfigData(
+        val codeCustomer = UUID.randomUUID().toString()
+        val payload = NewCustomerConfigRequest(
             "token-123",
             "client-123",
             "PAG_SEGURO",
+            codeCustomer,
         )
-        val customerCode = UUID.randomUUID()
         RestAssured.given()
             .body(payload)
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .`when`()
-            .post("/v1/customer/{customerCode}/config", customerCode)
+            .post(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(201)
         RestAssured.given()
             .header("Content-Type", MediaType.APPLICATION_JSON)
+            .queryParam("customerCode", codeCustomer)
             .`when`()
-            .get("/v1/customer/{customerCode}/config", customerCode)
+            .get(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(200)
             .body("data.size()", `is`(1))
@@ -40,58 +46,60 @@ class CustomerConfigResourceTest {
 
     @Test
     fun newCustomerConfigShouldBeNotCreatedWhenPayloadIsInvalid() {
-        val payload = NewCustomerConfigData(
+        val payload = NewCustomerConfigRequest(
+            "",
             "",
             "",
             "",
         )
-        val customerCode = UUID.randomUUID()
         RestAssured.given()
             .body(payload)
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .`when`()
-            .post("/v1/customer/{customerCode}/config", customerCode)
+            .post(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(400)
     }
 
     @Test
     fun newCustomerConfigShouldBeNotCreatedWhenApiFieldOnPayloadIsInvalid() {
-        val payload = NewCustomerConfigData(
+        val customerCode = UUID.randomUUID().toString()
+        val payload = NewCustomerConfigRequest(
             "token-123",
             "client-321",
             "OTHER",
+            customerCode,
         )
-        val customerCode = UUID.randomUUID()
         RestAssured.given()
             .body(payload)
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .`when`()
-            .post("/v1/customer/{customerCode}/config", customerCode)
+            .post(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(400)
     }
 
     @Test
     fun newCustomerConfigShouldBeNotCreatedWhenApiValueIsTheSame() {
-        val payload = NewCustomerConfigData(
+        val customerCode = UUID.randomUUID().toString()
+        val payload = NewCustomerConfigRequest(
             "token-123",
             "client-321",
             "PAG_SEGURO",
+            customerCode,
         )
-        val customerCode = UUID.randomUUID()
         RestAssured.given()
             .body(payload)
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .`when`()
-            .post("/v1/customer/{customerCode}/config", customerCode)
+            .post(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(201)
         RestAssured.given()
             .body(payload)
             .header("Content-Type", MediaType.APPLICATION_JSON)
             .`when`()
-            .post("/v1/customer/{customerCode}/config", customerCode)
+            .post(V1_CUSTOMER_CONFIG_PATH)
             .then()
             .statusCode(409)
     }
