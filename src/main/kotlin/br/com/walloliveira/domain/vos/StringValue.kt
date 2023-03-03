@@ -1,6 +1,6 @@
-package br.com.walloliveira.domain
+package br.com.walloliveira.domain.vos
 
-abstract class InputString(v: String?) {
+class StringValue(v: String?) {
     var value: String
         private set
 

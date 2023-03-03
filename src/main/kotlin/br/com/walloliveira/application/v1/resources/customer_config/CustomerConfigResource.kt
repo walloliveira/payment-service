@@ -22,13 +22,13 @@ class CustomerConfigResource @Inject constructor(
 
     @POST
     fun create(data: NewCustomerConfigRequest): Response {
-        this.customerConfigService.create(data.toInput())
+        this.customerConfigService.create(data.toCustomerConfig())
         return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
     fun list(@QueryParam("customerCode") customerCode: String): Response {
-        val list = customerConfigService.find(Code(customerCode)).map { CustomerConfigResponse(it) }
+        val list = customerConfigService.find(Code.of(customerCode)).map { CustomerConfigResponse(it) }
         return Response.ok(ResourceListResponse(list)).build()
     }
 }
