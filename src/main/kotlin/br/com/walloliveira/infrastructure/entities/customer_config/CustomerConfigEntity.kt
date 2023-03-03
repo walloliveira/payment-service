@@ -2,9 +2,8 @@ package br.com.walloliveira.infrastructure.entities.customer_config
 
 import br.com.walloliveira.domain.customer_config.CustomerConfig
 import br.com.walloliveira.domain.vos.Api
-import br.com.walloliveira.domain.vos.ClientId
 import br.com.walloliveira.domain.vos.Code
-import br.com.walloliveira.domain.vos.Token
+import br.com.walloliveira.domain.vos.StringValue
 import br.com.walloliveira.infrastructure.entities.AttributeEncryptor
 import br.com.walloliveira.infrastructure.entities.BaseEntity
 import javax.persistence.Column
@@ -55,10 +54,10 @@ class CustomerConfigEntity : BaseEntity() {
     }
 
     fun toDomain() = CustomerConfig(
-        code = Code(this.code),
-        customerCode = Code(this.customerCode),
-        token = Token(this.token),
-        clientId = ClientId(this.clientId),
+        code = Code.of(this.code),
+        customerCode = Code.of(this.customerCode),
+        token = StringValue(this.token),
+        clientId = StringValue(this.clientId),
         api = Api.of(this.api),
     )
 }
