@@ -1,10 +1,8 @@
 package br.com.walloliveira.infrastructure.entities.payment
 
-import br.com.walloliveira.infrastructure.entities.AttributeEncryptor
 import br.com.walloliveira.infrastructure.entities.BaseEntity
 import java.math.BigDecimal
 import javax.persistence.Column
-import javax.persistence.Convert
 import javax.persistence.DiscriminatorColumn
 import javax.persistence.DiscriminatorType
 import javax.persistence.Entity
@@ -35,7 +33,6 @@ abstract class PaymentEntity : BaseEntity() {
     open lateinit var code: String
 
     @Column(name = "str_description")
-    @Convert(converter = AttributeEncryptor::class)
     open var description: String? = null
 
     @Column(name = "num_value")

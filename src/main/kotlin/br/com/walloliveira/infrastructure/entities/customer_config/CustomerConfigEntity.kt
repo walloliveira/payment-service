@@ -1,13 +1,8 @@
 package br.com.walloliveira.infrastructure.entities.customer_config
 
 import br.com.walloliveira.domain.customer_config.CustomerConfig
-import br.com.walloliveira.domain.vos.Api
-import br.com.walloliveira.domain.vos.Code
-import br.com.walloliveira.domain.vos.StringValue
-import br.com.walloliveira.infrastructure.entities.AttributeEncryptor
 import br.com.walloliveira.infrastructure.entities.BaseEntity
 import javax.persistence.Column
-import javax.persistence.Convert
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -31,11 +26,9 @@ class CustomerConfigEntity : BaseEntity() {
     lateinit var code: String
 
     @Column(name = "str_token")
-    @Convert(converter = AttributeEncryptor::class)
     lateinit var token: String
 
     @Column(name = "str_client_id")
-    @Convert(converter = AttributeEncryptor::class)
     lateinit var clientId: String
 
     @Column(name = "enum_api")
@@ -46,18 +39,10 @@ class CustomerConfigEntity : BaseEntity() {
             val entity = CustomerConfigEntity()
             entity.code = customerConfig.code.valueString
             entity.customerCode = customerConfig.customerCode.valueString
-            entity.clientId = customerConfig.clientId.value
-            entity.token = customerConfig.token.value
+            entity.clientId = customerConfig.clientId.valueString
+            entity.token = customerConfig.token.valueString
             entity.api = customerConfig.api.description
             return entity
         }
     }
-
-    fun toDomain() = CustomerConfig(
-        code = Code.of(this.code),
-        customerCode = Code.of(this.customerCode),
-        token = StringValue(this.token),
-        clientId = StringValue(this.clientId),
-        api = Api.of(this.api),
-    )
 }

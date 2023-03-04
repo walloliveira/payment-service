@@ -16,5 +16,4 @@ quarkus:
     jdbc:
       url: jdbc:postgresql://localhost:5432/walloliveira?currentSchema=payment_service_sch
 encrypt:
-  algorithm: AES
   key: 12d3bcc88cabcf50aba877e04364ac62
