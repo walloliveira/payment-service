@@ -20,7 +20,6 @@ class DomainCustomerConfigService(
         val customerConfig = CustomerConfig.toEncrypt(
             newCustomerConfig,
             encryptRepository.getKey(),
-            encryptRepository.getEncryptor(),
         )
         repository.save(customerConfig)
     }

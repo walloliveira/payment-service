@@ -32,7 +32,6 @@ class CustomerConfigEntityRepository(@Inject private val encryptRepository: Encr
             clientId = StringValue(customerConfigEntity.clientId),
             api = Api.of(customerConfigEntity.api),
             key = encryptRepository.getKey(),
-            encryptor = encryptRepository.getEncryptor(),
         )
     }
 
