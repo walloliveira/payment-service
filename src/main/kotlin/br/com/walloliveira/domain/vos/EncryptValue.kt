@@ -7,17 +7,18 @@ import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
+import javax.crypto.spec.IvParameterSpec
 
 
-class EncryptValue (
+class EncryptValue(
     value: StringValue,
     key: Key,
     decryptMode: Int,
-    private val cipher: Cipher,
 ) {
     companion object {
+        private const val CIPHER_TRANSFORMATION = "AES/CFB8/NoPadding"
         private const val SECURE_RANDOM_ALGORITHM = "NativePRNG"
-        private const val ENCRYPT_BYTE_SIZE = 32
+        private const val IV_SIZE = 16
     }
 
     val valueString: String
@@ -26,20 +27,21 @@ class EncryptValue (
     private var value: String
 
     init {
-        cipher.init(decryptMode, key)
         this.value = when (decryptMode) {
-            Cipher.ENCRYPT_MODE -> encrypt(value.value)
-            Cipher.DECRYPT_MODE -> decrypt(value.value)
+            Cipher.ENCRYPT_MODE -> encrypt(value.value, key)
+            Cipher.DECRYPT_MODE -> decrypt(value.value, key)
             else -> throw IllegalArgumentException("Decrypt mode is invalid")
         }
     }
 
-    private fun decrypt(value: String): String {
+    private fun decrypt(value: String, key: Key): String {
+        val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         return try {
-            val encryptedValue = cipher.doFinal(value.base64DecodeToByteArray())
-            val removedPrefix = encryptedValue.copyOfRange(ENCRYPT_BYTE_SIZE, encryptedValue.size)
-            val result = removedPrefix.copyOfRange(0, removedPrefix.size - ENCRYPT_BYTE_SIZE)
-            String(result)
+            val cipherText = value.base64DecodeToByteArray()
+            val iv = cipherText.copyOfRange(0, IV_SIZE)
+            val valueByteArray = cipherText.copyOfRange(IV_SIZE, cipherText.size)
+            cipher.init(Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
+            String(cipher.doFinal(valueByteArray))
         } catch (e: InvalidKeyException) {
             throw RuntimeException(e)
         } catch (e: IllegalBlockSizeException) {
@@ -49,15 +51,13 @@ class EncryptValue (
         }
     }
 
-    private fun encrypt(value: String): String {
+    private fun encrypt(value: String, key: Key): String {
+        val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         return try {
-            val random = SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM)
-            val bytes = ByteArray(ENCRYPT_BYTE_SIZE)
-            random.nextBytes(bytes)
-            val prefix = bytes + value.toByteArray()
-            random.nextBytes(bytes)
-            val result = prefix + bytes
-            cipher.doFinal(result).base64EncodeToString()
+            val iv = generateIv()
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv)
+            val cryptogram = iv.iv + cipher.doFinal(value.toByteArray())
+            cryptogram.base64EncodeToString()
         } catch (e: InvalidKeyException) {
             throw RuntimeException(e)
         } catch (e: IllegalBlockSizeException) {
@@ -65,6 +65,13 @@ class EncryptValue (
         } catch (e: BadPaddingException) {
             throw RuntimeException(e)
         }
+    }
+
+    private fun generateIv(): IvParameterSpec {
+        val bytes = ByteArray(IV_SIZE)
+        val secureRandom = SecureRandom.getInstance(SECURE_RANDOM_ALGORITHM)
+        secureRandom.nextBytes(bytes)
+        return IvParameterSpec(bytes)
     }
 }
 

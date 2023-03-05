@@ -6,5 +6,4 @@ import javax.crypto.Cipher
 interface EncryptRepository {
 
     fun getKey(): Key
-    fun getEncryptor(): Cipher
 }

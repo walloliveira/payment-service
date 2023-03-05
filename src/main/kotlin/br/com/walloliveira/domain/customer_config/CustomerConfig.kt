@@ -14,17 +14,15 @@ class CustomerConfig private constructor(
     token: StringValue,
     clientId: StringValue,
     key: Key,
-    encryptor: Cipher,
     decryptMode: Int,
 ) {
-    val token = EncryptValue(value = token, key = key, cipher = encryptor, decryptMode = decryptMode)
-    val clientId = EncryptValue(value = clientId, key = key, cipher = encryptor, decryptMode = decryptMode)
+    val token = EncryptValue(value = token, key = key, decryptMode = decryptMode)
+    val clientId = EncryptValue(value = clientId, key = key, decryptMode = decryptMode)
 
     companion object {
         fun toEncrypt(
             newCustomerConfig: NewCustomerConfig,
             key: Key,
-            encryptor: Cipher,
         ): CustomerConfig {
             return CustomerConfig(
                 code = Code.new(),
@@ -33,7 +31,6 @@ class CustomerConfig private constructor(
                 clientId = newCustomerConfig.clientId,
                 api = newCustomerConfig.api,
                 key = key,
-                encryptor = encryptor,
                 decryptMode = Cipher.ENCRYPT_MODE,
             )
         }
@@ -45,7 +42,6 @@ class CustomerConfig private constructor(
             clientId: StringValue,
             api: Api,
             key: Key,
-            encryptor: Cipher
         ): CustomerConfig {
             return CustomerConfig(
                 code = code,
@@ -54,7 +50,6 @@ class CustomerConfig private constructor(
                 clientId = clientId,
                 api = api,
                 key = key,
-                encryptor = encryptor,
                 decryptMode = Cipher.DECRYPT_MODE,
             )
         }
