@@ -34,6 +34,12 @@ class CustomerConfigEntity : BaseEntity() {
     @Column(name = "enum_api")
     lateinit var api: String
 
+    @Column(name = "str_public_key", length = 4096)
+    lateinit var publicKey: String
+
+    @Column(name = "str_private_key", length = 4096)
+    lateinit var privateKey: String
+
     companion object {
         fun of(customerConfig: CustomerConfig): CustomerConfigEntity {
             val entity = CustomerConfigEntity()
@@ -42,6 +48,8 @@ class CustomerConfigEntity : BaseEntity() {
             entity.clientId = customerConfig.clientId.valueString
             entity.token = customerConfig.token.valueString
             entity.api = customerConfig.api.description
+            entity.publicKey = customerConfig.publicKeyString
+            entity.privateKey = customerConfig.privateKeyString
             return entity
         }
     }
