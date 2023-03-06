@@ -1,16 +1,17 @@
 package br.com.walloliveira.domain.vos
 
+import br.com.walloliveira.domain.base64DecodeToByteArray
+import br.com.walloliveira.domain.base64EncodeToString
 import java.security.InvalidKeyException
 import java.security.Key
 import java.security.SecureRandom
-import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.spec.IvParameterSpec
 
 
-class EncryptValue(
+class EncryptValue private constructor(
     value: StringValue,
     key: Key,
     decryptMode: Int,
@@ -19,6 +20,14 @@ class EncryptValue(
         private const val CIPHER_TRANSFORMATION = "AES/CFB8/NoPadding"
         private const val SECURE_RANDOM_ALGORITHM = "NativePRNG"
         private const val IV_SIZE = 16
+
+        fun encrypt(value: StringValue, key: Key): EncryptValue {
+            return EncryptValue(value, key, Cipher.ENCRYPT_MODE)
+        }
+
+        fun decrypt(value: StringValue, key: Key): EncryptValue {
+            return EncryptValue(value, key, Cipher.DECRYPT_MODE)
+        }
     }
 
     val valueString: String
@@ -74,7 +83,3 @@ class EncryptValue(
         return IvParameterSpec(bytes)
     }
 }
-
-private fun String.base64DecodeToByteArray() = Base64.getDecoder().decode(this)
-
-private fun ByteArray.base64EncodeToString() = Base64.getEncoder().encodeToString(this)
